@@ -3,6 +3,7 @@ namespace Nets.Network;
 public class Network
 {
     private Layer[] _layers;
+    public readonly NetworkTopology Topology;
 
     public Network(Layer[] layers)
     {
@@ -28,5 +29,6 @@ public class Network
             layers.Add(new Layer(topology.LayerSizes[i-1], topology.LayerSizes[i]));
         }
         _layers = layers.ToArray();
+        Topology = topology;
     }
 }

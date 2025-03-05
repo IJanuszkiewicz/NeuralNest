@@ -23,6 +23,8 @@ public class Eye
 
     public float[] Process(Food[] foods, Vector2 position, Vector2 speed)
     {
+        var signals = new float[NumReceptors];
+        
         var leftVector = Vector2.Transform(speed, Matrix3x2.CreateRotation(_fov/2));
         foreach (var food in foods)
         {
@@ -32,8 +34,12 @@ public class Eye
             if (relativePos.Length() > _range) continue;
             if (AngleBetween(speed, relativePos) > _fov/2) continue;
             
+            int receptor = (int)Math.Min(Math.Floor(AngleBetween(leftVector, relativePos)/_fov  * NumReceptors), NumReceptors - 1);
+            float energy = (_range - relativePos.Length())/_range;
             
+            signals[receptor] += energy;
         }
+        return signals;
     }
 
     private float AngleBetween(Vector2 a, Vector2 b)
