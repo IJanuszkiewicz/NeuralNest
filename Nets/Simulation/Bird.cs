@@ -1,9 +1,10 @@
 using System.Numerics;
+using Nets.GeneticAlgorithm;
 
 namespace Nets.Simulation;
 using Nets.Network;
 
-public class Bird
+public class Bird : IIndividual
 {
     private Network _brain;
     Vector2 _position;
@@ -16,5 +17,17 @@ public class Bird
         _position = position;
         _velocity = velocity;
         _maxAcceleration = maxAcceleration;
+    }
+    
+    
+    public float Fitness => throw new NotImplementedException();
+
+    // TODO: convert neural network to chromosome
+    public Chromosome Chromosome => throw new NotImplementedException(); 
+    
+    // TODO: create bird from chromosome
+    public static IIndividual FromChromosome(Chromosome chromosome)
+    {
+        throw new NotImplementedException();
     }
 }

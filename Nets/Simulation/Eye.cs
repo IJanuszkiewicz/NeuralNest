@@ -7,7 +7,7 @@ public class Eye
 {
     private readonly float _fov;
     private readonly float _range;
-    private const int NumReceptors = 5;
+    public const int NumReceptors = 5;
 
     public Eye(float fov, float range)
     {
