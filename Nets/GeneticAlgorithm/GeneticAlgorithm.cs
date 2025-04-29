@@ -9,19 +9,20 @@ public class GeneticAlgorithm(
     ICrossoverMethod crossoverMethod,
     IMutationMethod mutationMethod)
 {
-    private ISelectionMethod _selectionMethod = selectionMethod;
-    private ICrossoverMethod _crossoverMethod = crossoverMethod;
-    private IMutationMethod _mutationMethod = mutationMethod;
-
     public T[] Evolve<T>(T[] population) where T : IIndividual
     {
+        var newGeneration = new T[population.Length];
         for (int i = 0; i < population.Length; i++)
         {
-            // select
-            // crossover
-            // mutate
+            var parentA = selectionMethod.Select(population);
+            var parentB = selectionMethod.Select(population);
+            
+            var child = crossoverMethod.Crossover(parentA, parentB);
+            
+            mutationMethod.Mutate(child.Genome);
+            newGeneration[i] = child;
         }
-        throw new NotImplementedException();
+        return newGeneration;
     }
 
 }

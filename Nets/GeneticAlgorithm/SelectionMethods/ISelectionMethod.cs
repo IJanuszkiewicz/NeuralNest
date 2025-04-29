@@ -2,5 +2,5 @@ namespace Nets.GeneticAlgorithm.SelectionMethods;
 
 public interface ISelectionMethod
 {
-    public IIndividual Select(IIndividual[] population);
+    public T Select<T>(T[] population) where T : IIndividual;
 }

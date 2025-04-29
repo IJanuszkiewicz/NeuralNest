@@ -3,7 +3,7 @@ using System.Numerics;
 using Nets.GeneticAlgorithm;
 
 namespace Nets.Simulation;
-using Nets.Network;
+using Network;
 
 public class Bird : IIndividual
 {

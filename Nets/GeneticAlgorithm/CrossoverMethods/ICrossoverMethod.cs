@@ -2,5 +2,5 @@ namespace Nets.GeneticAlgorithm.CrossoverMethods;
 
 public interface ICrossoverMethod
 {
-    public Genome Crossover(IIndividual parentA, IIndividual parentB);
+    public T Crossover<T>(T parentA, T parentB) where T : IIndividual;
 }

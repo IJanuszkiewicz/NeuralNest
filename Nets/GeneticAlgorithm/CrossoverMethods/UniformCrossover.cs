@@ -2,7 +2,7 @@ namespace Nets.GeneticAlgorithm.CrossoverMethods;
 
 public class UniformCrossover : ICrossoverMethod
 {
-    public Genome Crossover(IIndividual parentA, IIndividual parentB)
+    public T Crossover<T>(T parentA, T parentB) where T : IIndividual
     {
         float[] childGenes = new float[parentA.Genome.Genes.Length];
 
@@ -11,6 +11,6 @@ public class UniformCrossover : ICrossoverMethod
             childGenes[i] = Random.Shared.NextDouble() < 0.5 ? parentA.Genome.Genes[i] : parentB.Genome.Genes[i];
         }
 
-        return new Genome(childGenes);
+        return (T)T.FromGenome(new Genome(childGenes));
     }
 }

@@ -2,7 +2,7 @@ namespace Nets.GeneticAlgorithm.SelectionMethods;
 
 public class ProportionalSelection : ISelectionMethod
 {
-    public IIndividual Select(IIndividual[] population)
+    public T Select<T>(T[] population) where T : IIndividual
     {
         float sum = 0;
         foreach (var individual in population)

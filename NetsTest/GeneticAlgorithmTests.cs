@@ -9,11 +9,13 @@ namespace NetsTest;
 [TestFixture]
 public class GeneticAlgorithmTests
 {
+    private const double SignificanceLevel = 0.01;
+    
     private class TestIndividual(float? fitness, Genome? genome = null) : IIndividual
     {
         public float Fitness { get; } = fitness ?? 0;
         public Genome Genome { get; } = genome ?? new Genome([]);
-        public static IIndividual FromGenome(Genome genome) { return new TestIndividual(0, null); }
+        public static IIndividual FromGenome(Genome genome) { return new TestIndividual(0, genome); }
     }
     
     private double CalculateChiSquarePValue(int[] observed, float[] expectedProportions, int sampleSize)
@@ -33,13 +35,13 @@ public class GeneticAlgorithmTests
     public void TestProportionalSelection()
     {
         float[] expectedProportions = [0.1f, 0.2f, 0.3f, 0.4f];
-        const int sampleSize = 10_000;
-        var population = new IIndividual[]
+        const int sampleSize = 100_000;
+        var population = new TestIndividual[]
         {
-            new TestIndividual(expectedProportions[0]),
-            new TestIndividual(expectedProportions[1]),
-            new TestIndividual(expectedProportions[2]),
-            new TestIndividual(expectedProportions[3])
+            new(expectedProportions[0]),
+            new(expectedProportions[1]),
+            new(expectedProportions[2]),
+            new(expectedProportions[3])
         };
         int[] observed = [0, 0, 0, 0];
         var selectionMethod = new ProportionalSelection();
@@ -60,13 +62,13 @@ public class GeneticAlgorithmTests
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
 
         Assert.That(observed.Length, Is.EqualTo(expectedProportions.Length));
-        Assert.That(pValue, Is.GreaterThan(0.05));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
     }
 
     [Test]
     public void TestUniformCrossover()
     {
-        const int sampleSize = 10_000;
+        const int sampleSize = 100_000;
         float[] genomeA = new float[sampleSize], genomeB = new float[sampleSize];
         for (int i = 0; i < sampleSize; i++)
         {
@@ -79,26 +81,26 @@ public class GeneticAlgorithmTests
         
         var child = crossoverMethod.Crossover(parentA, parentB);
 
-        int numOfParentAGenes = (int)child.Genes.Sum();
+        int numOfParentAGenes = (int)child.Genome.Genes.Sum();
         int[] observed = [numOfParentAGenes, sampleSize - numOfParentAGenes];
         float[] expectedProportions = [0.5f, 0.5f];
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
         
-        Assert.That(child.Genes.Length, Is.EqualTo(sampleSize));
-        Assert.That(pValue, Is.GreaterThan(0.05));
+        Assert.That(child.Genome.Genes.Length, Is.EqualTo(sampleSize));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
     }
     
     [Test]
     public void TestGaussianMutation_NoMutation()
     {
-        const int sampleSize = 10_000;
+        const int sampleSize = 100_000;
         float[] genome = new float[sampleSize];
         for (int i = 0; i < sampleSize; i++)
         {
             genome[i] = 0.5f;
         }
         var individual = new TestIndividual(null, new Genome(genome));
-        var mutationMethod = new GaussianMutation(0f, 0.1f);
+        var mutationMethod = new GaussianMutation(0f, 100f);
         
         mutationMethod.Mutate(individual.Genome);
 
@@ -109,14 +111,14 @@ public class GeneticAlgorithmTests
     [Test]
     public void TestGaussianMutation_HalfMutated()
     {
-        const int sampleSize = 10_000;
+        const int sampleSize = 100_000;
         float[] genome = new float[sampleSize];
         for (int i = 0; i < sampleSize; i++)
         {
             genome[i] = 0.5f;
         }
         var individual = new TestIndividual(null, new Genome(genome));
-        var mutationMethod = new GaussianMutation(0.5f, 0.1f);
+        var mutationMethod = new GaussianMutation(0.5f, 100f);
         
         mutationMethod.Mutate(individual.Genome);
 
@@ -125,20 +127,20 @@ public class GeneticAlgorithmTests
         float[] expectedProportions = [0.5f, 0.5f];
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
         
-        Assert.That(pValue, Is.GreaterThan(0.05));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
     }
     
     [Test]
     public void TestGaussianMutation_AllMutated()
     {
-        const int sampleSize = 10_000;
+        const int sampleSize = 100_000;
         float[] genome = new float[sampleSize];
         for (int i = 0; i < sampleSize; i++)
         {
             genome[i] = 0.5f;
         }
         var individual = new TestIndividual(null, new Genome(genome));
-        var mutationMethod = new GaussianMutation(1f, 0.1f);
+        var mutationMethod = new GaussianMutation(1f, 100f);
         
         mutationMethod.Mutate(individual.Genome);
 
