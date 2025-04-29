@@ -10,6 +10,13 @@ namespace NetsTest;
 public class GeneticAlgorithmTests
 {
     private const double SignificanceLevel = 0.01;
+
+    private const String RandomTestFailMessage =
+        """
+        Since this is a random statistical test, every once in a while it may fail.
+        Worry only if it fails consistently or the reported p-value is much smaller than the significance level.
+        
+        """;
     
     private class TestIndividual(float? fitness, Genome? genome = null) : IIndividual
     {
@@ -62,7 +69,7 @@ public class GeneticAlgorithmTests
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
 
         Assert.That(observed.Length, Is.EqualTo(expectedProportions.Length));
-        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel), RandomTestFailMessage);
     }
 
     [Test]
@@ -87,7 +94,7 @@ public class GeneticAlgorithmTests
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
         
         Assert.That(child.Genome.Genes.Length, Is.EqualTo(sampleSize));
-        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel), RandomTestFailMessage);
     }
     
     [Test]
@@ -127,7 +134,7 @@ public class GeneticAlgorithmTests
         float[] expectedProportions = [0.5f, 0.5f];
         double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
         
-        Assert.That(pValue, Is.GreaterThan(SignificanceLevel));
+        Assert.That(pValue, Is.GreaterThan(SignificanceLevel), RandomTestFailMessage);
     }
     
     [Test]
