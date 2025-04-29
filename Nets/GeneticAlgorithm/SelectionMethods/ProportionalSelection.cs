@@ -2,8 +2,6 @@ namespace Nets.GeneticAlgorithm.SelectionMethods;
 
 public class ProportionalSelection : ISelectionMethod
 {
-    private readonly Random _random = new();
-    
     public IIndividual Select(IIndividual[] population)
     {
         float sum = 0;
@@ -12,7 +10,7 @@ public class ProportionalSelection : ISelectionMethod
             sum += individual.Fitness;
         }
         
-        double randomValue  = _random.NextDouble();
+        double randomValue  = Random.Shared.NextDouble();
         
         double cumSum = 0;
         foreach (var individual in population)

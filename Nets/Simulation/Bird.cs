@@ -52,11 +52,11 @@ public class Bird : IIndividual
 
     public float Fitness { get; set; }
 
-    // TODO: convert neural network to chromosome
-    public Chromosome Chromosome => throw new NotImplementedException(); 
+    // TODO: convert neural network to genome
+    public Genome Genome => throw new NotImplementedException(); 
     
-    // TODO: create bird from chromosome
-    public static IIndividual FromChromosome(Chromosome chromosome)
+    // TODO: create bird from genome
+    public static IIndividual FromGenome(Genome genome)
     {
         throw new NotImplementedException();
     }

@@ -1,24 +1,38 @@
 using Nets.GeneticAlgorithm;
 using Nets.GeneticAlgorithm.SelectionMethods;
 using MathNet.Numerics.Distributions;
+using Nets.GeneticAlgorithm.CrossoverMethods;
 
 namespace NetsTest;
 
 [TestFixture]
 public class GeneticAlgorithmTests
 {
-    private class TestIndividual(float fitness) : IIndividual
+    private class TestIndividual(float? fitness, Genome? genome = null) : IIndividual
     {
-        public float Fitness { get; } = fitness;
-        public Chromosome Chromosome { get; } = new([]);
-        public static IIndividual FromChromosome(Chromosome chromosome) { return new TestIndividual(0); }
+        public float Fitness { get; } = fitness ?? 0;
+        public Genome Genome { get; } = genome ?? new Genome([]);
+        public static IIndividual FromGenome(Genome genome) { return new TestIndividual(0, null); }
+    }
+    
+    private double CalculateChiSquarePValue(int[] observed, float[] expectedProportions, int sampleSize)
+    {
+        double chiSquare = 0;
+        for (int i = 0; i < observed.Length; i++)
+        {
+            double expected = expectedProportions[i] * sampleSize;
+            chiSquare += Math.Pow(observed[i] - expected, 2) / expected;
+        }
+        int degreesOfFreedom = observed.Length - 1;
+        var chiDist = new ChiSquared(degreesOfFreedom);
+        return 1 - chiDist.CumulativeDistribution(chiSquare);
     }
     
     [Test]
     public void TestProportionalSelection()
     {
         float[] expectedProportions = [0.1f, 0.2f, 0.3f, 0.4f];
-        int sampleSize = 10_000;
+        const int sampleSize = 10_000;
         var population = new IIndividual[]
         {
             new TestIndividual(expectedProportions[0]),
@@ -41,19 +55,35 @@ public class GeneticAlgorithmTests
             else if (selectedIndividual == population[3])
                 observed[3]++;
         }
+        
+        double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
 
-        // Compute Chi-Square statistic
-        double chiSquare = 0;
-        for (int i = 0; i < observed.Length; i++)
+        Assert.That(observed.Length, Is.EqualTo(expectedProportions.Length));
+        Assert.That(pValue, Is.GreaterThan(0.05));
+    }
+
+    [Test]
+    public void TestUniformCrossover()
+    {
+        const int sampleSize = 10_000;
+        float[] genomeA = new float[sampleSize], genomeB = new float[sampleSize];
+        for (int i = 0; i < sampleSize; i++)
         {
-            double expected = expectedProportions[i] * sampleSize;
-            chiSquare += Math.Pow(observed[i] - expected, 2) / expected;
+            genomeA[i] = 1;
+            genomeB[i] = 0;
         }
+        var parentA = new TestIndividual(null, new Genome(genomeA));
+        var parentB = new TestIndividual(null, new Genome(genomeB));
+        var crossoverMethod = new UniformCrossover();
         
-        int degreesOfFreedom = observed.Length - 1;
-        var chiDist = new ChiSquared(degreesOfFreedom);
-        double pValue = 1 - chiDist.CumulativeDistribution(chiSquare);
+        var child = crossoverMethod.Crossover(parentA, parentB);
+
+        int numOfParentAGenes = (int)child.Genes.Sum();
+        int[] observed = [numOfParentAGenes, sampleSize - numOfParentAGenes];
+        float[] expectedProportions = [0.5f, 0.5f];
+        double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
         
+        Assert.That(child.Genes.Length, Is.EqualTo(sampleSize));
         Assert.That(pValue, Is.GreaterThan(0.05));
     }
 }
