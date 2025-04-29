@@ -2,28 +2,28 @@ namespace Nets.Network;
 
 public class Layer
 {
-    private Neuron[] _neurons;
+    public Neuron[] Neurons { get; }
 
     public Layer(int inputSize, int outputSize)
     {
-        _neurons = new Neuron[outputSize];
+        Neurons = new Neuron[outputSize];
         for (int i = 0; i < outputSize; i++)
         {
-            _neurons[i] = new Neuron(inputSize);
+            Neurons[i] = new Neuron(inputSize);
         }
     }
 
     public Layer(Neuron[] neurons)
     {
-        _neurons = neurons;
+        Neurons = neurons;
     }
 
     public float[] Propagate(float[] input)
     {
-        var output = new float[_neurons.Length];
-        for (int i = 0; i < _neurons.Length; i++)
+        var output = new float[Neurons.Length];
+        for (int i = 0; i < Neurons.Length; i++)
         {
-            output[i] = _neurons[i].Propagate(input);
+            output[i] = Neurons[i].Propagate(input);
         }
         return output;
     }

@@ -2,18 +2,19 @@ namespace Nets.Network;
 
 public class Network
 {
-    private Layer[] _layers;
+    public Layer[] Layers { get; }
     public readonly NetworkTopology Topology;
 
-    public Network(Layer[] layers)
+    public Network(Layer[] layers, NetworkTopology topology)
     {
-        _layers = layers;
+        Layers = layers;
+        Topology = topology;
     }
 
     public float[] Propagate(float[] input)
     {
         float[] output = input;
-        foreach (Layer layer in _layers)
+        foreach (Layer layer in Layers)
         {
             output = layer.Propagate(output);
         }
@@ -28,7 +29,7 @@ public class Network
         {
             layers.Add(new Layer(topology.LayerSizes[i-1], topology.LayerSizes[i]));
         }
-        _layers = layers.ToArray();
+        Layers = layers.ToArray();
         Topology = topology;
     }
 }

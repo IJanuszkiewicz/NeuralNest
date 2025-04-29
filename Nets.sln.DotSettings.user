@@ -3,5 +3,7 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::CC985686-8CF8-4B92-87E9-DC32844FD169::net9.0::NetsTest.Tests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::CC985686-8CF8-4B92-87E9-DC32844FD169::net9.0::NetsTest.GeneticAlgorithmTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::CC985686-8CF8-4B92-87E9-DC32844FD169::net9.0::NetsTest.NeuralNetworkTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::CC985686-8CF8-4B92-87E9-DC32844FD169::net9.0::NetsTest.SimulationTests.BirdMakeChildTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

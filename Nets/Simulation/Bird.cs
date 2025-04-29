@@ -51,13 +51,47 @@ public class Bird : IIndividual
 
 
     public float Fitness { get; set; }
-
-    // TODO: convert neural network to genome
-    public Genome Genome => throw new NotImplementedException(); 
     
-    // TODO: create bird from genome
-    public static IIndividual FromGenome(Genome genome)
+    public Genome Genome
     {
-        throw new NotImplementedException();
+        get
+        {
+            var genomeList = new List<float>();
+            foreach (var layer in _brain.Layers)
+            {
+                foreach (var neuron in layer.Neurons)
+                {
+                    genomeList.Add(neuron.Bias);
+                    foreach (var weight in neuron.Weights)
+                    {
+                        genomeList.Add(weight);
+                    }
+                }
+            }
+            return new Genome(genomeList.ToArray());
+        }
+    }
+    
+    public IIndividual MakeChild(Genome genome)
+    {
+        var layers = new List<Layer>();
+        int geneIndex = 0;
+        foreach (var layer in _brain.Layers)
+        {
+            var neurons = new List<Neuron>();
+            foreach (var neuron in layer.Neurons)
+            {
+                float bias = genome.Genes[geneIndex++];
+                float[] weights = new float[neuron.Weights.Length];
+                for (int k = 0; k < weights.Length; k++)
+                {
+                    weights[k] = genome.Genes[geneIndex++];
+                }
+                neurons.Add(new Neuron(bias, weights));
+            }
+            layers.Add(new Layer(neurons.ToArray()));
+        }
+        var childBrain = new Network(layers.ToArray(), _brain.Topology);
+        return new Bird(childBrain, _position, _velocity, _eye);
     }
 }

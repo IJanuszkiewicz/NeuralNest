@@ -15,7 +15,7 @@ public class GeneticAlgorithmTests
     {
         public float Fitness { get; } = fitness ?? 0;
         public Genome Genome { get; } = genome ?? new Genome([]);
-        public static IIndividual FromGenome(Genome genome) { return new TestIndividual(0, genome); }
+        public IIndividual MakeChild(Genome genome) { return new TestIndividual(0, genome); }
     }
     
     private double CalculateChiSquarePValue(int[] observed, float[] expectedProportions, int sampleSize)

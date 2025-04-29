@@ -11,6 +11,6 @@ public class UniformCrossover : ICrossoverMethod
             childGenes[i] = Random.Shared.NextDouble() < 0.5 ? parentA.Genome.Genes[i] : parentB.Genome.Genes[i];
         }
 
-        return (T)T.FromGenome(new Genome(childGenes));
+        return (T)parentA.MakeChild(new Genome(childGenes));
     }
 }
