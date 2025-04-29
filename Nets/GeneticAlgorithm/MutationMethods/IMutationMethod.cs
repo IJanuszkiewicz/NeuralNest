@@ -1,4 +1,4 @@
-namespace Nets.GeneticAlgorithm;
+namespace Nets.GeneticAlgorithm.MutationMethods;
 
 public interface IMutationMethod
 {
