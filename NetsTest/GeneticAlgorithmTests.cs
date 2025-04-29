@@ -2,6 +2,7 @@ using Nets.GeneticAlgorithm;
 using Nets.GeneticAlgorithm.SelectionMethods;
 using MathNet.Numerics.Distributions;
 using Nets.GeneticAlgorithm.CrossoverMethods;
+using Nets.GeneticAlgorithm.MutationMethods;
 
 namespace NetsTest;
 
@@ -85,5 +86,63 @@ public class GeneticAlgorithmTests
         
         Assert.That(child.Genes.Length, Is.EqualTo(sampleSize));
         Assert.That(pValue, Is.GreaterThan(0.05));
+    }
+    
+    [Test]
+    public void TestGaussianMutation_NoMutation()
+    {
+        const int sampleSize = 10_000;
+        float[] genome = new float[sampleSize];
+        for (int i = 0; i < sampleSize; i++)
+        {
+            genome[i] = 0.5f;
+        }
+        var individual = new TestIndividual(null, new Genome(genome));
+        var mutationMethod = new GaussianMutation(0f, 0.1f);
+        
+        mutationMethod.Mutate(individual.Genome);
+
+        int numOfMutatedGenes = individual.Genome.Genes.Count(g => g != 0.5f);  // Intentional float comparison
+        Assert.That(numOfMutatedGenes, Is.EqualTo(0));
+    }
+    
+    [Test]
+    public void TestGaussianMutation_HalfMutated()
+    {
+        const int sampleSize = 10_000;
+        float[] genome = new float[sampleSize];
+        for (int i = 0; i < sampleSize; i++)
+        {
+            genome[i] = 0.5f;
+        }
+        var individual = new TestIndividual(null, new Genome(genome));
+        var mutationMethod = new GaussianMutation(0.5f, 0.1f);
+        
+        mutationMethod.Mutate(individual.Genome);
+
+        int numOfMutatedGenes = individual.Genome.Genes.Count(g => g != 0.5f);  // Intentional float comparison
+        int[] observed = [numOfMutatedGenes, sampleSize - numOfMutatedGenes];
+        float[] expectedProportions = [0.5f, 0.5f];
+        double pValue = CalculateChiSquarePValue(observed, expectedProportions, sampleSize);
+        
+        Assert.That(pValue, Is.GreaterThan(0.05));
+    }
+    
+    [Test]
+    public void TestGaussianMutation_AllMutated()
+    {
+        const int sampleSize = 10_000;
+        float[] genome = new float[sampleSize];
+        for (int i = 0; i < sampleSize; i++)
+        {
+            genome[i] = 0.5f;
+        }
+        var individual = new TestIndividual(null, new Genome(genome));
+        var mutationMethod = new GaussianMutation(1f, 0.1f);
+        
+        mutationMethod.Mutate(individual.Genome);
+
+        int numOfMutatedGenes = individual.Genome.Genes.Count(g => g != 0.5f);  // Intentional float comparison
+        Assert.That(numOfMutatedGenes, Is.EqualTo(sampleSize));
     }
 }
