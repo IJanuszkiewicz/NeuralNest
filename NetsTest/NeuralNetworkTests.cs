@@ -1,7 +1,8 @@
 ﻿namespace NetsTest;
 using Nets.Network;
 
-public class Tests
+[TestFixture]
+public class NeuralNetworkTests
 {
     [SetUp]
     public void Setup()

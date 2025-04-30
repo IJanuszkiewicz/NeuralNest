@@ -1,28 +1,28 @@
+using Nets.GeneticAlgorithm.CrossoverMethods;
+using Nets.GeneticAlgorithm.MutationMethods;
+using Nets.GeneticAlgorithm.SelectionMethods;
+
 namespace Nets.GeneticAlgorithm;
 
-public class GeneticAlgorithm
+public class GeneticAlgorithm(
+    ISelectionMethod selectionMethod,
+    ICrossoverMethod crossoverMethod,
+    IMutationMethod mutationMethod)
 {
-    private ISelectionMethod _selectionMethod;
-    private ICrossoverMethod _crossoverMethod;
-    private IMutationMethod _mutationMethod;
-
-    public GeneticAlgorithm(ISelectionMethod selectionMethod, ICrossoverMethod crossoverMethod,
-        IMutationMethod mutationMethod)
+    public T[] Evolve<T>(T[] population) where T : IIndividual
     {
-        _selectionMethod = selectionMethod;
-        _crossoverMethod = crossoverMethod;
-        _mutationMethod = mutationMethod;
-    }
-
-    public I[] Evolve<I>(I[] population) where I : IIndividual
-    {
+        var newGeneration = new T[population.Length];
         for (int i = 0; i < population.Length; i++)
         {
-            // select
-            // crossover
-            // mutate
+            var parentA = selectionMethod.Select(population);
+            var parentB = selectionMethod.Select(population);
+            
+            var child = crossoverMethod.Crossover(parentA, parentB);
+            
+            mutationMethod.Mutate(child.Genome);
+            newGeneration[i] = child;
         }
-        throw new NotImplementedException();
+        return newGeneration;
     }
 
 }
