@@ -8,15 +8,16 @@ namespace Nets.Simulation;
 
 public class Simulation
 {
-    private World _world;
-    public const float BirdRange = 0.1f;
+    public double StepWaitTime { get; set; } = 10000;
+    public World World { get; }
+    public const float BirdRange = 0.5f;
     private Random _random;
     private GeneticAlgorithm.GeneticAlgorithm _geneticAlgorithm;
     private SimulationParameters _simulationParameters;
 
     public Simulation(SimulationParameters parameters)
     {
-        _world = new World(parameters);
+        World = new World(parameters);
         _random = new Random();
         _geneticAlgorithm = new GeneticAlgorithm.GeneticAlgorithm(
             new ProportionalSelection(), 
@@ -28,19 +29,23 @@ public class Simulation
 
     public GenerationStats NewGeneration()
     {
-        var fitnesses  = new float[_world.Birds.Length];
-        for (var i = 0; i < _world.Birds.Length; i++)
+        var fitnesses  = new float[World.Birds.Length];
+        for (var i = 0; i < World.Birds.Length; i++)
         {
-            fitnesses[i] = _world.Birds[i].Fitness;
+            fitnesses[i] = World.Birds[i].Fitness;
         }
-        
-        _world.Birds = _geneticAlgorithm.Evolve<Bird>(_world.Birds);
-        foreach (var bird in _world.Birds)
+
+        lock (this)
         {
-            var (pos, vel) = GetRandomPosition();
-            bird.Position = pos;
-            bird.Velocity = vel;
+            World.Birds = _geneticAlgorithm.Evolve<Bird>(World.Birds);
+            foreach (var bird in World.Birds)
+            {
+                var (pos, vel) = GetRandomPosition();
+                bird.Position = pos;
+                bird.Velocity = vel;
+            }
         }
+
         return new GenerationStats(fitnesses);
     }
 
@@ -52,9 +57,7 @@ public class Simulation
             for (int j = 0; j < _simulationParameters.GenerationDuration; j++)
             {
                 Step();
-                // Thread.Sleep(TimeSpan.FromMilliseconds(1000));
-                
-                // Draw here
+                Thread.Sleep(TimeSpan.FromMicroseconds(StepWaitTime));
             }
             allStats[i] = NewGeneration();
             Console.WriteLine($"Generation {i} stats: {allStats[i]}");
@@ -64,7 +67,7 @@ public class Simulation
 
     private (Vector2, Vector2) GetRandomPosition()
     {
-        var position = new Vector2(_random.NextSingle() * _world.Width, _random.NextSingle() * _world.Height);
+        var position = new Vector2(_random.NextSingle() * World.Width, _random.NextSingle() * World.Height);
         var randSpeed = new Vector2((float)_random.NextDouble(), (float)_random.NextDouble());
         randSpeed = Vector2.Normalize(randSpeed) * 
                     (_random.NextSingle() * (_simulationParameters.MaxSpeed - _simulationParameters.MinSpeed) + 
@@ -75,45 +78,48 @@ public class Simulation
     public void Step()
     {
         ProcessCollisions();
-        Parallel.ForEach(_world.Birds, bird =>
+        Parallel.ForEach(World.Birds, bird =>
         {
-            bird.ProcessBrain(_world.Foods);
-            bird.Move();
+            bird.ProcessBrain(World.Foods);
+            lock (this)
+            {
+                bird.Move();
+            }
         });
     }
 
     private void ProcessCollisions()
     {
-        foreach (var bird in _world.Birds)
+        foreach (var bird in World.Birds)
         {
             // The world is a donut
-            if (bird.Position.X > _world.Width)
+            if (bird.Position.X > World.Width)
             {
-                bird.Position.X -= _world.Width;
+                bird.Position.X -= World.Width;
             }
 
             if (bird.Position.X < 0)
             {
-                bird.Position.X += _world.Width;
+                bird.Position.X += World.Width;
             }
 
-            if (bird.Position.Y > _world.Height)
+            if (bird.Position.Y > World.Height)
             {
-                bird.Position.Y -= _world.Height;
+                bird.Position.Y -= World.Height;
             }
 
             if (bird.Position.Y < 0)
             {
-                bird.Position.Y += _world.Height;
+                bird.Position.Y += World.Height;
             }
                 
-            foreach (var food in _world.Foods)
+            foreach (var food in World.Foods)
             {
                 if ((bird.Position - food.Position).Length() < BirdRange)
                 {
                     bird.Fitness += 1;
-                    food.Position.X = _random.NextSingle() * _world.Width;
-                    food.Position.Y = _random.NextSingle() * _world.Height;
+                    food.Position.X = _random.NextSingle() * World.Width;
+                    food.Position.Y = _random.NextSingle() * World.Height;
                 }
             }
         }

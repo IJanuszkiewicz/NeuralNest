@@ -3,6 +3,13 @@ using Nets.Simulation;
 
 namespace Nets;
 
+static class Config
+{
+    public const int WindowWidth = 1000;
+    public const int WindowHeight = 1000;
+    public const  string WindowTitle = "Nets";
+}
+
 class Program
 {
     static void Main(string[] args)
@@ -25,6 +32,12 @@ class Program
         );
         
         var sim = new Simulation.Simulation(parameters);
-        sim.Run();
+        
+        var simulationThread = new Thread(() => sim.Run());
+        simulationThread.Start();
+        
+        var gui = new Visualisation.Visualisation(sim);
+        gui.Run();
+        Environment.Exit(1);
     }
 }
