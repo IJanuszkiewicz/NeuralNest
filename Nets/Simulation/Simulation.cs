@@ -52,13 +52,11 @@ public class Simulation
             {
                 Step();
                 // Thread.Sleep(TimeSpan.FromMilliseconds(1000));
-                // Console.SetCursorPosition(0,0);
-                // _world.Draw();
+                
+                // Draw here
             }
             var stats = NewGeneration();
-            // Console.WriteLine($"Generation {i} stats: {stats}");
-            Console.SetCursorPosition(0,0);
-            _world.Draw();
+            Console.WriteLine($"Generation {i} stats: {stats}");
         }
     }
 

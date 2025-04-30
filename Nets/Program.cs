@@ -8,9 +8,9 @@ class Program
     static void Main(string[] args)
     {
         var parameters = new SimulationParameters(
-            new NetworkTopology([7, 8, 2]),
-            40,
-            60, 
+            new NetworkTopology([7, 8, 8, 2]),
+            100,
+            100, 
             140, 
             30, 
             (float)Math.PI * 0.9f, 
