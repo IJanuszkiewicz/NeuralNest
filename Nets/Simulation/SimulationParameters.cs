@@ -19,19 +19,19 @@ public class SimulationParameters(
     float gaussianMutationStrength)
 
 {
-    public readonly NetworkTopology NetworkTopology = networkTopology;
-    public readonly uint NumBirds = numBirds;
-    public readonly uint NumFoods = numFoods;
-    public readonly uint WorldWidth = worldWidth;
-    public readonly uint WorldHeight = worldHeight;
-    public readonly float EyeFov = eyeFov;
-    public readonly float EyeRange = eyeRange;
+    public NetworkTopology NetworkTopology = networkTopology;
+    public uint NumBirds = numBirds;
+    public uint NumFoods = numFoods;
+    public uint WorldWidth = worldWidth;
+    public uint WorldHeight = worldHeight;
+    public float EyeFov = eyeFov;
+    public float EyeRange = eyeRange;
 
-    public readonly float MaxSpeed = maxSpeed;
-    public readonly float MinSpeed = minSpeed;
-    public readonly uint GenerationDuration = generationDuration; //duration in ticks
-    public readonly uint NumGenerations = numGenerations;
-    public readonly uint NumReceptors = numReceptors;
-    public readonly float GaussianMutationProbability = gaussianMutationProbability;
-    public readonly float GaussianMutationStrength = gaussianMutationStrength;
+    public float MaxSpeed = maxSpeed;
+    public float MinSpeed = minSpeed;
+    public uint GenerationDuration = generationDuration; //duration in ticks
+    public uint NumGenerations = numGenerations;
+    public uint NumReceptors = numReceptors;
+    public float GaussianMutationProbability = gaussianMutationProbability;
+    public float GaussianMutationStrength = gaussianMutationStrength;
 }

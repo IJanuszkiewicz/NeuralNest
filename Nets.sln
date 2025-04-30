@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nets", "Nets\Nets.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetsTest", "NetsTest\NetsTest.csproj", "{CC985686-8CF8-4B92-87E9-DC32844FD169}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimizer", "Optimizer\Optimizer.csproj", "{EDACADDE-7CEA-4069-AD67-99A27824CF1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{CC985686-8CF8-4B92-87E9-DC32844FD169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC985686-8CF8-4B92-87E9-DC32844FD169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC985686-8CF8-4B92-87E9-DC32844FD169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDACADDE-7CEA-4069-AD67-99A27824CF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDACADDE-7CEA-4069-AD67-99A27824CF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDACADDE-7CEA-4069-AD67-99A27824CF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDACADDE-7CEA-4069-AD67-99A27824CF1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
