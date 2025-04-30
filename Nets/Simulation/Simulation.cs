@@ -44,8 +44,9 @@ public class Simulation
         return new GenerationStats(fitnesses);
     }
 
-    public void Run()
+    public GenerationStats[] Run()
     {
+        var allStats = new GenerationStats[_simulationParameters.NumGenerations];
         for (int i = 0; i < _simulationParameters.NumGenerations; i++)
         {
             for (int j = 0; j < _simulationParameters.GenerationDuration; j++)
@@ -55,9 +56,10 @@ public class Simulation
                 
                 // Draw here
             }
-            var stats = NewGeneration();
-            Console.WriteLine($"Generation {i} stats: {stats}");
+            allStats[i] = NewGeneration();
+            Console.WriteLine($"Generation {i} stats: {allStats[i]}");
         }
+        return allStats;
     }
 
     private (Vector2, Vector2) GetRandomPosition()

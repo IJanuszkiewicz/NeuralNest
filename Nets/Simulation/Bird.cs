@@ -36,7 +36,11 @@ public class Bird : IIndividual
         var vision = _eye.Process(foods, Position, Velocity);
         var thought = _brain.Propagate(vision);
         var speedChange = thought[1];
-        var angleChange = thought[0];
+        var angleChange = thought[0] * MathF.PI ;
+        // if (Random.Shared.NextDouble() < 0.0001)
+        // {
+            // Console.WriteLine($"Speed change: {speedChange}, Angle change: {angleChange}, Speed: {Velocity.Length()}");
+        // }
 
         Velocity = Vector2.Normalize(Velocity) * float.Clamp(Velocity.Length() + speedChange, _minSpeed, _maxSpeed);
         Velocity = Vector2.Transform(Velocity, Matrix3x2.CreateRotation(angleChange));
