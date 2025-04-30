@@ -7,9 +7,9 @@ public class Eye
 {
     private readonly float _fov;
     private readonly float _range;
-    public const int NumReceptors = 5;
+    public readonly uint NumReceptors;
 
-    public Eye(float fov, float range)
+    public Eye(float fov, float range, uint numReceptors)
     {
         // needed for AngleBetween to work correctly
         Debug.Assert(fov < Math.PI);
@@ -19,6 +19,7 @@ public class Eye
         
         _fov = fov;
         _range = range;
+        NumReceptors = numReceptors;
     }
 
     public float[] Process(Food[] foods, Vector2 position, Vector2 speed)

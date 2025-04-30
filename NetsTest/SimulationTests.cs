@@ -13,7 +13,7 @@ public class SimulationTests
     {
         var topology = new NetworkTopology([5, 6, 2]);
         var brain = new Network(topology);
-        var bird = new Bird(brain, Vector2.Zero, Vector2.Zero, new Eye(1,1));
+        var bird = new Bird(brain, Vector2.Zero, Vector2.Zero, new Eye(1,1, 5), 1,0.1f);
         
         var child = bird.MakeChild(bird.Genome);
         
