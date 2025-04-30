@@ -16,10 +16,10 @@ public class Visualisation : GameWindow
     private readonly Birds _birds;
     private readonly Foods _foods;
     
-    public Visualisation(int width, int height, string title, Simulation.Simulation simulation) : base(GameWindowSettings.Default,
+    public Visualisation(Simulation.Simulation simulation) : base(GameWindowSettings.Default,
         new NativeWindowSettings
         {
-            ClientSize = (width, height), Title = title, NumberOfSamples = 4
+            ClientSize = (Config.WindowWidth, Config.WindowHeight), Title = Config.WindowTitle, NumberOfSamples = 4
         }
     )
     {
@@ -28,7 +28,7 @@ public class Visualisation : GameWindow
         _birdShader.SetVector3("color", new Vector3(1.0f, 0f, 0f));
         _birdShader.SetFloat("worldWidth", simulation.World.Width);
         _birdShader.SetFloat("worldHeight", simulation.World.Height);
-        _birdShader.SetFloat("size", 0.02f);
+        _birdShader.SetFloat("size", 0.01f);
         
         _foodShader = new Shader("../../../Visualisation/Shaders/shader.vert", "../../../Visualisation/Shaders/shader.frag");
         _foodShader.SetVector3("color", new Vector3(1.0f, 1.0f, 1.0f));
@@ -49,6 +49,30 @@ public class Visualisation : GameWindow
         GL.Enable(EnableCap.Multisample);
         GL.Enable(EnableCap.ProgramPointSize);
         GL.ClearColor(0, 0, 0, 1.0f);
+    }
+    
+    protected override void OnUpdateFrame(FrameEventArgs e)
+    {
+        base.OnUpdateFrame(e);
+        
+        if (KeyboardState.IsKeyDown(Keys.Escape))
+            Close();
+
+        if (KeyboardState.IsKeyDown(Keys.Up) || KeyboardState.IsKeyDown(Keys.W))
+        {
+            lock (_simulation)
+            {
+                _simulation.StepWaitTime = Math.Max(0.0, _simulation.StepWaitTime - 5);
+            }
+        }
+        
+        if (KeyboardState.IsKeyDown(Keys.Down) || KeyboardState.IsKeyDown(Keys.S))
+        {
+            lock (_simulation)
+            {
+                _simulation.StepWaitTime += 5;
+            }
+        }
     }
     
     protected override void OnRenderFrame(FrameEventArgs e)

@@ -13,14 +13,14 @@ void main()
     float size = size;
     
     vec2 velocity = vVel[0];
-    float angle = atan(velocity.y, velocity.x);
+    float angle = atan(velocity.x, velocity.y);
     
     mat2 rot = mat2(
     cos(angle), -sin(angle),
     sin(angle),  cos(angle)
     );
     
-    vec2 p0 = rot * vec2(0.0,  size);
+    vec2 p0 = rot * vec2(0.0,  size*1.5);
     vec2 p1 = rot * vec2(-size, -size);
     vec2 p2 = rot * vec2( size, -size);
 

@@ -8,8 +8,9 @@ namespace Nets.Simulation;
 
 public class Simulation
 {
+    public double StepWaitTime { get; set; } = 10000;
     public World World { get; }
-    public const float BirdRange = 0.1f;
+    public const float BirdRange = 0.5f;
     private Random _random;
     private GeneticAlgorithm.GeneticAlgorithm _geneticAlgorithm;
     private SimulationParameters _simulationParameters;
@@ -56,9 +57,7 @@ public class Simulation
             for (int j = 0; j < _simulationParameters.GenerationDuration; j++)
             {
                 Step();
-                Thread.Sleep(TimeSpan.FromMilliseconds(100));
-                
-                // Draw here
+                Thread.Sleep(TimeSpan.FromMicroseconds(StepWaitTime));
             }
             allStats[i] = NewGeneration();
             Console.WriteLine($"Generation {i} stats: {allStats[i]}");
