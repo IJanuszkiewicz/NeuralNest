@@ -25,6 +25,12 @@ class Program
         );
         
         var sim = new Simulation.Simulation(parameters);
-        sim.Run();
+        
+        var simulationThread = new Thread(() => sim.Run());
+        simulationThread.Start();
+        
+        var gui = new Visualisation.Visualisation(500, 500, "Nets", sim);
+        gui.Run();
+        Environment.Exit(1);
     }
 }
