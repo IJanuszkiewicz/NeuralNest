@@ -73,6 +73,24 @@ public class Visualisation : GameWindow
                 _simulation.StepWaitTime += 5;
             }
         }
+
+        if (KeyboardState.IsKeyDown(Keys.Right))
+        {
+            if (_simulation.StepWaitTime > 0)
+            {
+                lock (_simulation)
+                {
+                    _simulation.StepWaitTime = 0;
+                }
+            }
+        }
+        else
+        {
+            lock (_simulation)
+            {
+                _simulation.StepWaitTime = 10000;
+            }
+        }
     }
     
     protected override void OnRenderFrame(FrameEventArgs e)

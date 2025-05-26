@@ -8,7 +8,7 @@ public class GaussianMutation(float mutationProbability, float mutationStrength)
         {
             if ((float)Random.Shared.NextDouble() <= mutationProbability)
             {
-                float sign  = Random.Shared.NextDouble() < 0.5 ? -1 : 1;
+                float sign = Random.Shared.NextDouble() < 0.5 ? -1 : 1;
                 genome.Genes[i] += sign*(float)Random.Shared.NextDouble() * mutationStrength;
             }
         }

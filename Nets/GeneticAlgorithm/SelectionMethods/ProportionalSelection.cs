@@ -16,7 +16,7 @@ public class ProportionalSelection : ISelectionMethod
             return population[Random.Shared.NextInt64(population.Length)];
         }
         
-        double randomValue  = Random.Shared.NextDouble();
+        double randomValue = Random.Shared.NextDouble();
         
         double cumSum = 0;
         foreach (var individual in population)
